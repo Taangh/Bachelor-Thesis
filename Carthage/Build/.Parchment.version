@@ -1,0 +1,18 @@
+{
+  "Mac" : [
+
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+
+  ],
+  "commitish" : "v1.4.1",
+  "iOS" : [
+    {
+      "name" : "Parchment",
+      "hash" : "e9af4953cd1d82ba6501c3e642b8610a9f968809b8f7d8f2d5ac6796dcb82547"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+framework module Parchment {
+  umbrella header "Parchment.h"
+
+  export *
+  module * { export * }
+}
+
+module Parchment.Swift {
+    header "Parchment-Swift.h"
+    requires objc
+}
