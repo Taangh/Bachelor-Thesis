@@ -1,11 +1,3 @@
-//
-//  FoldingCellDemoTests.swift
-//  FoldingCellDemoTests
-//
-//  Created by Alex K on 06/09/2018.
-//  Copyright © 2018 Alex K. All rights reserved.
-//
-
 import XCTest
 import UIKit
 @testable import FoldingCell
@@ -24,11 +16,6 @@ class FoldingCellDemoTests: XCTestCase {
         foldingCell = vc.tableView.dequeueReusableCell(withIdentifier: "FoldingCell", for: IndexPath(row: 0, section: 0)) as? FoldingCell
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
     func testCreateFoldingCell() {
         XCTAssertNotNil(foldingCell)
     }
@@ -37,5 +24,7 @@ class FoldingCellDemoTests: XCTestCase {
         XCTAssertEqual(foldingCell.isUnfolded, false)
         foldingCell.unfold(true)
         XCTAssertEqual(foldingCell.isUnfolded, true)
+        foldingCell.unfold(false)
+        XCTAssertEqual(foldingCell.isUnfolded, false)
     }
 }

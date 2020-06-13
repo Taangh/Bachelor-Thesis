@@ -11,6 +11,10 @@ import UIKit
 import FoldingCell
 import Firebase
 
+protocol WineCellDelegate: class {
+    func scrollViewTap(wine: wine, opinions: [opinion])
+}
+
 class wineCell: FoldingCell, UIScrollViewDelegate {
     
     @IBOutlet weak var nameClosed: UILabel!
@@ -26,6 +30,8 @@ class wineCell: FoldingCell, UIScrollViewDelegate {
     @IBOutlet weak var tasteClosed: UILabel!
     @IBOutlet weak var tasteOpened: UILabel!
     @IBOutlet weak var labelImage: UIImageView!
+    @IBOutlet weak var country: UILabel!
+    @IBOutlet weak var vintage: UILabel!
     @IBOutlet weak var cheeseBtn: UIButton!
     @IBOutlet weak var vegetableBtn: UIButton!
     @IBOutlet weak var fruitBtn: UIButton!
@@ -33,11 +39,14 @@ class wineCell: FoldingCell, UIScrollViewDelegate {
     @IBOutlet weak var meatBtn: UIButton!
     @IBOutlet weak var reviewScrollView: UIScrollView!
     @IBOutlet weak var reviewPager: UIPageControl!
+    @IBOutlet weak var noOpinionView: UIView!
     var slides:[sliderWinesListReview] = []
     let db = Firestore.firestore()
-    var opinionsArr = [opinion]()
+    var opinions = [opinion]()
+    var wineVar: wine!
     //var ref: DatabaseReference!
-        
+    
+    weak var delegate: WineCellDelegate?
 
 
     override func awakeFromNib() {
@@ -45,11 +54,18 @@ class wineCell: FoldingCell, UIScrollViewDelegate {
         foregroundView.layer.masksToBounds = true
         //profilePhoto.layer.cornerRadius = profilePhoto.bounds.width/2
         super.awakeFromNib()
+        let scrollViewTap = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
+        scrollViewTap.numberOfTapsRequired = 1
+        reviewScrollView.addGestureRecognizer(scrollViewTap)
         reviewScrollView.delegate = self
         reviewScrollView.layer.cornerRadius = 10
 
         
         //view.bringSubviewToFront(reviewPager)
+    }
+    
+    @objc func scrollViewTapped() {
+        delegate?.scrollViewTap(wine: wineVar, opinions: opinions)
     }
     
     override func animationDuration(_ itemIndex: NSInteger, type _: FoldingCell.AnimationType) -> TimeInterval {
@@ -58,12 +74,27 @@ class wineCell: FoldingCell, UIScrollViewDelegate {
     }
     
     func updateCell(wine: wine) {
+        self.wineVar = wine
+//        var rating = 0.0
+//        if(wine.opinions != nil) {
+//        for opinion in wine.opinions {
+//            rating += Double(opinion.rating).rounded(toPlaces: 1)
+//        }
+//
+//        let avg = Double(Float(rating)/Float(wine.opinions.count)).rounded(toPlaces: 1)
+//        self.ratingClosed.text = "\(avg)"
+//        self.ratingOpened.text = "\(avg)"
+//        }
+        self.ratingClosed.text = "\(wine.rating.rounded(toPlaces: 1))"
+        self.ratingOpened.text = "\(wine.rating.rounded(toPlaces: 1))"
         self.nameClosed.text = wine.name.capitalized
         self.nameOpened.text = wine.name.capitalized
         self.priceClosed.text = "\(wine.price ?? 0) zł"
         self.priceOpened.text = "\(wine.price ?? 0) zł"
         self.amountClosed.text = "\(wine.amount ?? 0) ml"
         self.amountOpened.text = "\(wine.amount ?? 0) ml"
+        self.vintage.text = "\(wine.vintage ?? 0)"
+        self.country.text = wine.country
         self.colorClosed.text = wine.color
         self.colorOpened.text = wine.color
         self.tasteClosed.text = wine.taste
@@ -73,31 +104,50 @@ class wineCell: FoldingCell, UIScrollViewDelegate {
         self.meatBtn.isEnabled = wine.meat
         self.fruitBtn.isEnabled = wine.fruits
         self.cheeseBtn.isEnabled = wine.cheese
-        
+        if(wine.opinions != nil) {
+            self.opinions = wine.opinions
+        }
         importPreferences(wineID: wine.id, wine: wine)
         
     }
     
+    func downloadImage(wineID: String) {
+        let storage = Storage.storage(url:"gs://diploma-80825.appspot.com")
+        let path = "labels/\(wineID).jpg"
+        let storageRef = storage.reference(withPath: path)
+
+        storageRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            } else {
+                self.labelImage.image = UIImage(data: data!)
+            }
+        }
+    }
+    
     func createSlides(wine: wine) -> [sliderWinesListReview] {
-        var amount = opinionsArr.count
+        var amount = opinions.count
+
         var slides = [sliderWinesListReview]()
         if(amount>3) {
             amount = 3
         }
         
-        for _ in 0...amount {
+        for i in 0...(amount-1) {
             let slide:sliderWinesListReview = Bundle.main.loadNibNamed("sliderWinesListReview", owner: self, options: nil)?.first as! sliderWinesListReview
-            //slide.ratingLbl.text = "4.7"
+            let rating = Double(opinions[i].rating).rounded(toPlaces: 1)
+
+            slide.rating.text = "\(rating)"
+            slide.review.text = opinions[i].review
+            slide.setUser(userID: opinions[i].userID)
             slides.append(slide)
         }
         
-        print("SLIDES \(slides.count)")
         return slides
     }
     
-    
     func setupSlideScrollView(slides : [sliderWinesListReview]) {
-        reviewScrollView.frame = CGRect(x: 0, y: 0, width: 315, height: 143)
+        //reviewScrollView.frame = CGRect(x: 0, y: 0, width: 315, height: 143)
         reviewScrollView.contentSize = CGSize(width: 315 * CGFloat(slides.count), height: 143)
         reviewScrollView.isPagingEnabled = true
         
@@ -120,24 +170,31 @@ class wineCell: FoldingCell, UIScrollViewDelegate {
     
     func importPreferences(wineID: String, wine: wine) {
         
-        let query = db.collection("opinions").limit(to: 3).whereField("wineID", isEqualTo: wineID)
-        query.getDocuments { (querySnapshot, err) in
-            if let err = err {
-                print("Err \(err.localizedDescription)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let dict = document.data() as NSDictionary
-                    self.opinionsArr.append(opinion(id: document.documentID, rating: dict["rating"] as? Float ?? 0, userID: dict["userID"] as? String ?? "", wineID: dict["wineID"] as? String ?? "", review: dict["review"] as? String ?? ""))
-                }
-                print(self.opinionsArr)
+//        let query = db.collection("opinions").limit(to: 3).whereField("wineID", isEqualTo: wineID)
+//        query.getDocuments { (querySnapshot, err) in
+//            if let err = err {
+//                print("Err \(err.localizedDescription)")
+//            } else {
+//                for document in querySnapshot!.documents {
+//                    let dict = document.data() as NSDictionary
+//                    self.opinionsArr.append(opinion(id: document.documentID, rating: dict["rating"] as? Float ?? 0, userID: dict["userID"] as? String ?? "", wineID: dict["wineID"] as? String ?? "", review: dict["review"] as? String ?? ""))
+//                }
+//                print(self.opinionsArr)
+        if(wine.opinions != nil) {
                 self.slides = self.createSlides(wine: wine)
                 self.setupSlideScrollView(slides: self.slides)
-                
+        
                 self.reviewPager.numberOfPages = self.slides.count
                 self.reviewPager.currentPage = 0
                 self.reviewPager.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+                noOpinionView.isHidden = true
+//        }
+        } else {
+            noOpinionView.isHidden = false
+            self.ratingClosed.text = "0"
+            self.ratingOpened.text
+                = "0"
         }
-    }
 }
 }
 

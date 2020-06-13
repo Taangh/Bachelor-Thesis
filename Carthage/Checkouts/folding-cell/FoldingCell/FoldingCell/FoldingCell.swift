@@ -26,6 +26,8 @@ import UIKit
 /// UITableViewCell with folding animation
 open class FoldingCell: UITableViewCell {
     
+    @objc open var isUnfolded = false
+    
     /// UIView is displayed when cell open
     @IBOutlet open var containerView: UIView!
     @IBOutlet open var containerViewTop: NSLayoutConstraint!
@@ -76,7 +78,7 @@ open class FoldingCell: UITableViewCell {
     
     // MARK: configure
     
-    func configureDefaultState() {
+    private func configureDefaultState() {
         
         guard let foregroundViewTop = self.foregroundViewTop,
             let containerViewTop = self.containerViewTop else {
@@ -96,7 +98,7 @@ open class FoldingCell: UITableViewCell {
         contentView.bringSubviewToFront(foregroundView)
     }
     
-    func createAnimationItemView() -> [RotatedView] {
+    private func createAnimationItemView() -> [RotatedView] {
         
         var items = [RotatedView]()
         items.append(foregroundView)
@@ -121,18 +123,16 @@ open class FoldingCell: UITableViewCell {
         
         if animationType == .open {
             animationView?.subviews
+                .lazy
                 .compactMap { $0 as? RotatedView }
                 .forEach { $0.alpha = 0 }
         } else {
             animationView?.subviews
+                .lazy
                 .compactMap { $0 as? RotatedView }
                 .forEach {
-                    if animationType == .open {
-                        $0.alpha = 0
-                    } else {
-                        $0.alpha = 1
-                        $0.backView?.alpha = 0
-                    }
+                    $0.alpha = animationType == .open ? 0 : 1
+                    if animationType != .open { $0.backView?.alpha = 0 }
             }
         }
     }
@@ -277,11 +277,9 @@ open class FoldingCell: UITableViewCell {
         return animationView?.alpha == 1 ? true : false
     }
     
-    @objc open var isUnfolded = false
-    
     // MARK: Animations
     
-    @objc open func animationDuration(_ itemIndex: NSInteger, type: AnimationType) -> TimeInterval {
+    @objc open dynamic func animationDuration(_ itemIndex: NSInteger, type: AnimationType) -> TimeInterval {
         return type == .close ? durationsForCollapsedState[itemIndex] : durationsForExpandedState[itemIndex]
     }
     
@@ -357,7 +355,7 @@ open class FoldingCell: UITableViewCell {
         animationView?.alpha = 1
         containerView.alpha = 0
         
-        var durations: [TimeInterval] = durationSequence(.close).reversed()
+        let durations: [TimeInterval] = durationSequence(.close).reversed()
         
         var delay: TimeInterval = 0
         var timing = convertFromCAMediaTimingFunctionName(CAMediaTimingFunctionName.easeIn)
@@ -402,7 +400,7 @@ open class FoldingCell: UITableViewCell {
 
 open class RotatedView: UIView {
     
-    fileprivate enum Const {
+    private enum Const {
         static let rotationX = "rotation.x"
         static let transformRotationX = "transform.rotation.x"
     }

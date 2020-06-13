@@ -2,6 +2,102 @@
 
 `Parchment` adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.0](https://github.com/rechsteiner/Parchment/compare/v2.3.0...v2.4.0) - 2020-01-06
+
+### Fixes
+
+* Fix PagingTitleCell label horizontal constraints (#480)
+* Fix regression causing menuInteraction property not to work properly (#486)
+* Reload data when updating paging items in SwiftUI (#470)
+
+## [2.3.0](https://github.com/rechsteiner/Parchment/compare/v2.2.0...v2.3.0) - 2020-02-04
+
+### Added
+
+* Add support for SwiftUI (#460)
+* Add support for self-sizing menu cells (#461)
+
+### Fixes
+
+* Handle menu background color change after viewDidLoad (#465)
+
+## [2.2.0](https://github.com/rechsteiner/Parchment/compare/v2.1.0...v2.2.0) - 2020-21-03
+
+### Added
+
+* Add delegate method when selecting item (#450)
+
+### Changes
+
+* Update menu constraints when menuItemSize changes (#449)
+
+## [2.1.0](https://github.com/rechsteiner/Parchment/compare/v2.0.1...v2.1.0) - 2020-11-03
+
+### Changes
+
+* Add option to position menu vertically (#412)
+* Combine all example targets into single target (#442)
+
+### Fixes
+
+* Fix missing import causing SwiftPM to fail (#420)
+* Fix memory leak occurring when configuring size cache (#433)
+* Fix issue with initial selection not being set (#438)
+* Fix regression causing indicator not to animate (#441)
+* Fix issues with invalidation of size cache (#444)
+
+## [2.0.1](https://github.com/rechsteiner/Parchment/compare/v2.0.0...v2.0.1) - 2020-08-02
+
+### Fixes
+
+* Remove unused `FixedPagingViewController` file to fix xcodebuild.
+
+## [2.0.0](https://github.com/rechsteiner/Parchment/compare/v1.7.0...v2.0.0) - 2020-08-02
+
+See releases for more details: [https://github.com/rechsteiner/Parchment/releases/tag/v2.0.0]()
+
+### Changes
+
+* Removed `FixedPagingViewController`
+* Removed generics (#285)
+* Moved size delegate into separate protocol
+* Replaced `menuItemSource` with `register(cellClass:)`
+* Updated naming of data sources
+
+## [1.7.0](https://github.com/rechsteiner/Parchment/compare/v1.6.0...v1.7.0) - 2019-26-09
+
+### Fixes
+
+* Update to Swift 5 and Xcode 10.2 #339
+* Fix issue changing selection when view is not visible #371
+* Fix unbalanced appearance transitions #373
+* Fix issues when compiled as SPM dependency (Xcode 11) (#386)
+
+### Added
+
+* Add support for Accio as dependency manager #345
+
+## [1.6.0](https://github.com/rechsteiner/Parchment/compare/v1.5.0...v1.6.0) - 2019-03-03
+
+### Fixes
+
+* Forward appearance methods from EMPageViewController #306
+* Fix indicator insets with only one item #307
+
+### Added
+
+* Add method for reloading menu #312
+
+## [1.5.0](https://github.com/rechsteiner/Parchment/compare/v1.4.1...v1.5.0) - 2018-11-18
+
+### Fixes
+
+* Include vertical insets for indicator view #271
+* Remove development team from Parchment target #280
+* Update indicator and border views when changing options #245
+* Fix issue with width delegate not being called #244
+* Fix issue with invalidating collection view layout #240
+
 ## [1.4.1](https://github.com/rechsteiner/Parchment/compare/v1.4.0...v1.4.1) - 2018-08-15
 
 ### Fixes

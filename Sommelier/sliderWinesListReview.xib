@@ -81,6 +81,12 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="profileImage" destination="YxJ-ZI-u4D" id="g3d-2e-bsX"/>
+                <outlet property="rating" destination="hhl-VO-OjT" id="rzE-j5-ceY"/>
+                <outlet property="review" destination="34B-HY-iRi" id="wN7-M5-5yi"/>
+                <outlet property="userName" destination="jSC-JZ-cUG" id="Twv-TR-LcB"/>
+            </connections>
         </view>
     </objects>
     <resources>

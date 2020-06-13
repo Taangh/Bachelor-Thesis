@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         let vine = storyboard.instantiateViewController(withIdentifier: "winesVC") as! winesVC
         let profile = storyboard.instantiateViewController(withIdentifier: "profileVC")
         
-        let pagingViewController = FixedPagingViewController(viewControllers: [
+        let pagingViewController = PagingViewController(viewControllers: [
             vine,
             profile
             ])
@@ -34,16 +34,7 @@ class ViewController: UIViewController {
         pagingViewController.didMove(toParent: self)
         let indicators = PagingIndicatorOptions.visible(height: 4, zIndex: Int.max, spacing: UIEdgeInsets.zero, insets: UIEdgeInsets.zero)
         pagingViewController.indicatorOptions = indicators
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addReview))
-        
+                
     }
-    
-    @objc func addReview() {
-        
-    }
-
-
-
 }
 

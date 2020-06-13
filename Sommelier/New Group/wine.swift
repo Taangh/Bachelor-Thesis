@@ -15,13 +15,17 @@ class wine {
     private(set) var amount: Int!
     private(set) var color: String!
     private(set) var taste: String!
+    private(set) var country: String!
+    private(set) var vintage: Int!
     private(set) var vegetables: Bool!
     private(set) var fruits: Bool!
     private(set) var cheese: Bool!
     private(set) var meat: Bool!
     private(set) var fish: Bool!
+    var rating: Double!
+    var opinions: [opinion]!
 
-    init(id: String, name: String, price: Float, amount: Int, color: String, taste: String, vegetables: Bool, fruits: Bool, cheese: Bool, meat: Bool, fish: Bool) {
+    init(id: String, name: String, price: Float, amount: Int, color: String, taste: String, country: String, vintage: Int, vegetables: Bool, fruits: Bool, cheese: Bool, meat: Bool, fish: Bool, opinions: [opinion]) {
         self.id = id
         self.name = name
         self.price = price
@@ -33,5 +37,9 @@ class wine {
         self.cheese = cheese
         self.meat = meat
         self.fish = fish
+        self.country = country
+        self.vintage = vintage
+        self.opinions = opinions
+        self.rating = 0
     }
 }

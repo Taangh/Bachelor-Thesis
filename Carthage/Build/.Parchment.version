@@ -8,11 +8,17 @@
   "tvOS" : [
 
   ],
-  "commitish" : "v1.4.1",
+  "commitish" : "v2.4.0",
   "iOS" : [
     {
       "name" : "Parchment",
-      "hash" : "e9af4953cd1d82ba6501c3e642b8610a9f968809b8f7d8f2d5ac6796dcb82547"
+      "hash" : "9620052fca192ee380e8395a14c8b9c455dcbfb3bfafe410b5d70e984da47817",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    },
+    {
+      "name" : "Parchment",
+      "hash" : "9620052fca192ee380e8395a14c8b9c455dcbfb3bfafe410b5d70e984da47817",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
     }
   ]
 }

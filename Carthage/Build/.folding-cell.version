@@ -8,11 +8,12 @@
   "tvOS" : [
 
   ],
-  "commitish" : "4.0.1",
+  "commitish" : "5.0.2",
   "iOS" : [
     {
       "name" : "FoldingCell",
-      "hash" : "d03dcec5a10ecb33888e8a8fe1c611f9a09c18bc5d95ebdd814b41776ea63227"
+      "hash" : "d5ca865c4f9697b0df9ca1463d79f18e9fc49f258c00f6ee08cd8eb01193ed5f",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
     }
   ]
 }

@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2D04291521774E8E001B81FB /* FoldingCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC80F4821774D87006D1278 /* FoldingCell.framework */; };
 		2D04291621774E8E001B81FB /* FoldingCell.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC80F4821774D87006D1278 /* FoldingCell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2D04291821774F32001B81FB /* FoldingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D04291721774F32001B81FB /* FoldingCell.swift */; };
+		2D11634821B7FB1000FE59A8 /* opinionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D11634721B7FB0F00FE59A8 /* opinionsVC.swift */; };
+		2D11634A21B8349900FE59A8 /* opinionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D11634921B8349900FE59A8 /* opinionCell.swift */; };
 		2D21B12F218CB338007F3E02 /* slideProfileReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D21B12E218CB338007F3E02 /* slideProfileReview.swift */; };
 		2D21B131218CB3C0007F3E02 /* slideProfileReview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D21B130218CB3C0007F3E02 /* slideProfileReview.xib */; };
 		2D22084A218E12E600A81B55 /* sliderWinesListReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D220849218E12E600A81B55 /* sliderWinesListReview.swift */; };
@@ -24,6 +26,11 @@
 		2D2FF68B21765D4F00895ADC /* profileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2FF68A21765D4F00895ADC /* profileVC.swift */; };
 		2D2FF68F21765E2E00895ADC /* viewConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2FF68E21765E2E00895ADC /* viewConstraints.swift */; };
 		2D2FF6A121767D8600895ADC /* wineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2FF6A021767D8600895ADC /* wineCell.swift */; };
+		2D39572621BC571700A17914 /* scanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D39572521BC571700A17914 /* scanVC.swift */; };
+		2D39572A21BD9ECF00A17914 /* reviewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D39572921BD9ECD00A17914 /* reviewsVC.swift */; };
+		2D39572C21BDA4CF00A17914 /* reviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D39572B21BDA4CF00A17914 /* reviewCell.swift */; };
+		2D52A01521A9AB3700566BE6 /* sliderAddWine.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D52A01421A9AB3600566BE6 /* sliderAddWine.xib */; };
+		2D52A01721A9AD4B00566BE6 /* sliderAddWine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52A01621A9AD4B00566BE6 /* sliderAddWine.swift */; };
 		2DBC652D217CEEBD00ACFD1C /* wine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBC652C217CEEBD00ACFD1C /* wine.swift */; };
 		2DBC652F217CF12C00ACFD1C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2DBC652E217CF12C00ACFD1C /* GoogleService-Info.plist */; };
 		2DC80F4621774BAD006D1278 /* Parchment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2FF68621765A8100895ADC /* Parchment.framework */; };
@@ -48,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		2D04291721774F32001B81FB /* FoldingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoldingCell.swift; sourceTree = "<group>"; };
+		2D11634721B7FB0F00FE59A8 /* opinionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = opinionsVC.swift; sourceTree = "<group>"; };
+		2D11634921B8349900FE59A8 /* opinionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = opinionCell.swift; sourceTree = "<group>"; };
 		2D21B12E218CB338007F3E02 /* slideProfileReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slideProfileReview.swift; sourceTree = "<group>"; };
 		2D21B130218CB3C0007F3E02 /* slideProfileReview.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = slideProfileReview.xib; sourceTree = "<group>"; };
 		2D220849218E12E600A81B55 /* sliderWinesListReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sliderWinesListReview.swift; sourceTree = "<group>"; };
@@ -66,6 +75,11 @@
 		2D2FF68E21765E2E00895ADC /* viewConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = viewConstraints.swift; sourceTree = "<group>"; };
 		2D2FF69D21767D3000895ADC /* FoldingCell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoldingCell.framework; path = "/Users/damian/Documents/Szkoła/Diploma/Sommelier/Sommelier/FoldingCell.framework"; sourceTree = "<absolute>"; };
 		2D2FF6A021767D8600895ADC /* wineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wineCell.swift; sourceTree = "<group>"; };
+		2D39572521BC571700A17914 /* scanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scanVC.swift; sourceTree = "<group>"; };
+		2D39572921BD9ECD00A17914 /* reviewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewsVC.swift; sourceTree = "<group>"; };
+		2D39572B21BDA4CF00A17914 /* reviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reviewCell.swift; sourceTree = "<group>"; };
+		2D52A01421A9AB3600566BE6 /* sliderAddWine.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = sliderAddWine.xib; sourceTree = "<group>"; };
+		2D52A01621A9AD4B00566BE6 /* sliderAddWine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sliderAddWine.swift; sourceTree = "<group>"; };
 		2DADA9462185DC860082936C /* Sommelier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sommelier.entitlements; sourceTree = "<group>"; };
 		2DBC652C217CEEBD00ACFD1C /* wine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wine.swift; sourceTree = "<group>"; };
 		2DBC652E217CF12C00ACFD1C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -144,6 +158,8 @@
 				2D21B130218CB3C0007F3E02 /* slideProfileReview.xib */,
 				2D220849218E12E600A81B55 /* sliderWinesListReview.swift */,
 				2D22084B218E131A00A81B55 /* sliderWinesListReview.xib */,
+				2D52A01421A9AB3600566BE6 /* sliderAddWine.xib */,
+				2D52A01621A9AD4B00566BE6 /* sliderAddWine.swift */,
 			);
 			path = Sommelier;
 			sourceTree = "<group>";
@@ -154,6 +170,9 @@
 				2D2FF672217655FB00895ADC /* indexVC.swift */,
 				2D2FF68821765D3400895ADC /* winesVC.swift */,
 				2D2FF68A21765D4F00895ADC /* profileVC.swift */,
+				2D39572521BC571700A17914 /* scanVC.swift */,
+				2D11634721B7FB0F00FE59A8 /* opinionsVC.swift */,
+				2D39572921BD9ECD00A17914 /* reviewsVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -161,9 +180,11 @@
 		2D2FF69F21767D5600895ADC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2D11634921B8349900FE59A8 /* opinionCell.swift */,
 				2D2FF6A021767D8600895ADC /* wineCell.swift */,
 				2DBC652C217CEEBD00ACFD1C /* wine.swift */,
 				2D22084D2193120800A81B55 /* opinion.swift */,
+				2D39572B21BDA4CF00A17914 /* reviewCell.swift */,
 			);
 			name = Models;
 			path = "New Group";
@@ -223,7 +244,7 @@
 				};
 			};
 			buildConfigurationList = 2D2FF668217655FB00895ADC /* Build configuration list for PBXProject "Sommelier" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -246,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D21B131218CB3C0007F3E02 /* slideProfileReview.xib in Resources */,
+				2D52A01521A9AB3700566BE6 /* sliderAddWine.xib in Resources */,
 				2D22084C218E131A00A81B55 /* sliderWinesListReview.xib in Resources */,
 				2D2FF67B217655FD00895ADC /* LaunchScreen.storyboard in Resources */,
 				2D2FF678217655FD00895ADC /* Assets.xcassets in Resources */,
@@ -307,48 +329,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Sommelier/Pods-Sommelier-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
-				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
-				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
-				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
-				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-Sommelier/Pods-Sommelier-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-Sommelier/Pods-Sommelier-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sommelier/Pods-Sommelier-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sommelier/Pods-Sommelier-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -359,14 +348,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D2FF68F21765E2E00895ADC /* viewConstraints.swift in Sources */,
+				2D52A01721A9AD4B00566BE6 /* sliderAddWine.swift in Sources */,
 				2D04291821774F32001B81FB /* FoldingCell.swift in Sources */,
 				2D2FF68B21765D4F00895ADC /* profileVC.swift in Sources */,
 				2D2FF6A121767D8600895ADC /* wineCell.swift in Sources */,
 				2D2FF68921765D3400895ADC /* winesVC.swift in Sources */,
+				2D11634A21B8349900FE59A8 /* opinionCell.swift in Sources */,
 				2D2FF673217655FB00895ADC /* indexVC.swift in Sources */,
+				2D39572A21BD9ECF00A17914 /* reviewsVC.swift in Sources */,
+				2D11634821B7FB1000FE59A8 /* opinionsVC.swift in Sources */,
 				2D21B12F218CB338007F3E02 /* slideProfileReview.swift in Sources */,
+				2D39572C21BDA4CF00A17914 /* reviewCell.swift in Sources */,
 				2D22084A218E12E600A81B55 /* sliderWinesListReview.swift in Sources */,
 				2D22084E2193120900A81B55 /* opinion.swift in Sources */,
+				2D39572621BC571700A17914 /* scanVC.swift in Sources */,
 				2D2FF671217655FB00895ADC /* AppDelegate.swift in Sources */,
 				2DBC652D217CEEBD00ACFD1C /* wine.swift in Sources */,
 			);
@@ -523,14 +518,14 @@
 					"$(PROJECT_DIR)/Sommelier",
 				);
 				INFOPLIST_FILE = Sommelier/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.228202.sommelier;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.228202.sommelier-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -548,14 +543,14 @@
 					"$(PROJECT_DIR)/Sommelier",
 				);
 				INFOPLIST_FILE = Sommelier/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.228202.sommelier;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.228202.sommelier-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

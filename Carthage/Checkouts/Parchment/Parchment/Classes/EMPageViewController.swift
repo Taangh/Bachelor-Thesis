@@ -290,8 +290,39 @@ open class EMPageViewController: UIViewController, UIScrollViewDelegate {
         self.scrollReverse(animated: animated, completion: completion)
     }
     
-    
     // MARK: - View Controller Overrides
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let selectedViewController = selectedViewController {
+            selectedViewController.beginAppearanceTransition(true, animated: animated)
+        }
+    }
+
+    private var didViewAppear: Bool = false
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        didViewAppear = true
+        if let selectedViewController = selectedViewController {
+            selectedViewController.endAppearanceTransition()
+        }
+    }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let selectedViewController = selectedViewController {
+            selectedViewController.beginAppearanceTransition(false, animated: animated)
+        }
+    }
+    
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        didViewAppear = false
+        if let selectedViewController = selectedViewController {
+            selectedViewController.endAppearanceTransition()
+        }
+    }
     
     // Overriden to have control of accurate view appearance method calls
     open override var shouldAutomaticallyForwardAppearanceMethods : Bool {
@@ -331,11 +362,13 @@ open class EMPageViewController: UIViewController, UIScrollViewDelegate {
             // Shift view controllers forward
             self.beforeViewController = self.selectedViewController
             self.selectedViewController = self.afterViewController
-            
-            self.selectedViewController!.endAppearanceTransition()
-            
+          
             self.removeChildIfNeeded(self.beforeViewController)
-            self.beforeViewController?.endAppearanceTransition()
+          
+            if didViewAppear {
+                self.selectedViewController?.endAppearanceTransition()
+                self.beforeViewController?.endAppearanceTransition()
+            }
             
             self.delegate?.em_pageViewController?(self, didFinishScrollingFrom: self.beforeViewController, destinationViewController: self.selectedViewController!, transitionSuccessful: true)
             
@@ -358,11 +391,13 @@ open class EMPageViewController: UIViewController, UIScrollViewDelegate {
             // Shift view controllers reverse
             self.afterViewController = self.selectedViewController
             self.selectedViewController = self.beforeViewController
-            
-            self.selectedViewController!.endAppearanceTransition()
-            
+          
             self.removeChildIfNeeded(self.afterViewController)
-            self.afterViewController?.endAppearanceTransition()
+          
+            if didViewAppear {
+                self.selectedViewController?.endAppearanceTransition()
+                self.afterViewController?.endAppearanceTransition()
+            }
             
             self.delegate?.em_pageViewController?(self, didFinishScrollingFrom: self.afterViewController!, destinationViewController: self.selectedViewController!, transitionSuccessful: true)
             
@@ -388,8 +423,10 @@ open class EMPageViewController: UIViewController, UIScrollViewDelegate {
             } else if (self.navigationDirection == .reverse) {
                 self.beforeViewController!.beginAppearanceTransition(false, animated: self.transitionAnimated)
             }
-            
-            self.selectedViewController!.endAppearanceTransition()
+          
+            if didViewAppear {
+                self.selectedViewController?.endAppearanceTransition()
+            }
             
             // Remove hidden view controllers
             self.removeChildIfNeeded(self.beforeViewController)

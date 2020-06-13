@@ -2,18 +2,16 @@ version: 2
 jobs:
   build-and-test:
     macos:
-      xcode: "10.0.0"
+      xcode: "11.3.0"
     steps:
       - checkout
       - run:
-          name: Install Gems
-          command: bundle install
+          name: Run Unit Tests
+          command: xcodebuild -project Parchment.xcodeproj -scheme "Parchment" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' test
       - run:
-          name: Install Carthage Dependencies
-          command: carthage bootstrap --use-ssh --platform ios
-      - run:
-          name: Run Tests
-          command: bundle exec scan -s iOS -p Parchment.xcodeproj 
+          name: Run UI Tests
+          command: xcodebuild -project Parchment.xcodeproj -scheme "ParchmentUITests" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.3' test
+      
           
 workflows:
   version: 2

@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import FacebookLogin
 import Firebase
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegate {
+class profileVC: UIViewController, LoginButtonDelegate, UIScrollViewDelegate {
     
     @IBOutlet weak var profilePhotoBtn: UIButton!
     @IBOutlet weak var nameLbl: UILabel!
@@ -23,21 +22,31 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
     @IBOutlet weak var preferencesMoneySecondLbl: UILabel!
     @IBOutlet weak var preferencesMoneyThirdLbl: UILabel!
     @IBOutlet weak var preferencesMoneyFourthLbl: UILabel!
-
+    @IBOutlet weak var editProfileView: UIView!
+    @IBOutlet weak var prefView: UIView!
+    @IBOutlet weak var colorSegment: UISegmentedControl!
+    @IBOutlet weak var tasteSegment: UISegmentedControl!
+    @IBOutlet weak var priceSegment: UISegmentedControl!
     @IBOutlet weak var reviewPager: UIPageControl!
     @IBOutlet weak var reviewScrollView: UIScrollView!
     @IBOutlet weak var loginBg: UIView!
     @IBOutlet weak var profileView: UIView!
     @IBOutlet weak var profilePhoto: UIButton!
     @IBOutlet weak var photoBg: UIView!
-    var loginButton = FBSDKLoginButton()
+    @IBOutlet weak var noOpinionView: UIView!
+    var prefPrice = 0
+    var opinions = [opinion]()
+    var loginButton = FBLoginButton()
     var slides:[slideProfileReview] = []
     let db = Firestore.firestore()
+    
+    let colorDict = ["White": 0, "Red": 1, "Rose": 2]
+    let tasteDict = ["Sweet": 0, "Semi Sweet": 1, "Dry": 2]
     
     @IBAction func profilePhotoBtn(_ sender: Any) {
         let optionMenu = UIAlertController(title: nil, message: "Do you want to log out?", preferredStyle: .actionSheet)
         let logOutAction = UIAlertAction(title: "Log out", style: .destructive, handler: { (action) -> Void in
-            let manager = FBSDKLoginManager()
+            let manager = LoginManager()
             manager.logOut()
             try! Auth.auth().signOut()
             self.loginBg.isHidden = false
@@ -53,18 +62,16 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        importOpinions()
+        importPreferences()
 
-        //importPreferences()
         reviewScrollView.delegate = self
         reviewScrollView.layer.cornerRadius = 10
-        slides = createSlides()
-        setupSlideScrollView(slides: slides)
-        
-        reviewPager.numberOfPages = slides.count
-        reviewPager.currentPage = 0
-        reviewPager.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+        let scrollViewTap = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
+        scrollViewTap.numberOfTapsRequired = 1
+        reviewScrollView.addGestureRecognizer(scrollViewTap)
 
-        view.bringSubviewToFront(reviewPager)
         
             var frame = self.view.center
             frame.y = frame.y - loginButton.frame.height*2
@@ -72,7 +79,7 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
             loginButton.delegate = self
             view.addSubview(loginButton)
         
-        if(FBSDKAccessToken.current()?.tokenString == nil) {
+        if(AccessToken.current?.tokenString == nil) {
             loginBg.isHidden = false
             profileView.isHidden = true
             loginButton.isHidden = false
@@ -99,17 +106,50 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
         
     }
     
+    func addUserToDb() {
+        db.collection("users").document((Auth.auth().currentUser?.uid)!).getDocument { (document, error) in
+            if let document = document {
+                if document.exists {
+                    print("Exists")
+                } else {
+                    print("Not exist")
+                    self.db.collection("users").document((Auth.auth().currentUser?.uid)!).setData([
+                        "color": "",
+                        "taste": "",
+                        "name": Auth.auth().currentUser?.displayName!,
+                        "points": 0,
+                        "price": 0,
+                        "userPhoto": Auth.auth().currentUser?.photoURL?.absoluteString
+                    ]) { err in
+                        if let err = err {
+                            print("Error adding document: \(err)")
+                        } else {
+                        }
+                    }
+
+                }
+            }
+            
+        }
+    }
+    
     func importPreferences() {
-        var query = db.collection("users").document((Auth.auth().currentUser?.uid)!)
+        if((Auth.auth().currentUser) != nil) {
+        let query = db.collection("users").document((Auth.auth().currentUser?.uid)!)
         
-        query.getDocument { (document, error) in
+        query.addSnapshotListener { (document, error) in
             if let document = document, document.exists {
                 let dict = document.data()
-                self.preferencesColorLbl.text = dict?["color"] as! String
-                self.preferencesTasteLbl.text = dict?["taste"] as! String
-                let price = dict?["price"] as! Int
-                
-                switch price {
+                if(dict?["color"] as! String != "") {
+                    self.preferencesColorLbl.text = dict?["color"] as! String
+                    self.preferencesTasteLbl.text = dict?["taste"] as! String
+                } else {
+                    self.preferencesColorLbl.text = "-"
+                    self.preferencesTasteLbl.text = "-"
+
+                }
+                self.prefPrice = dict?["price"] as! Int
+                switch self.prefPrice {
                     case 1:
                         self.preferencesMoneyFirstLbl.textColor = #colorLiteral(red: 0.3294117647, green: 0.2823529412, blue: 0.3137254902, alpha: 1)
                         self.preferencesMoneySecondLbl.textColor = #colorLiteral(red: 0.5529411765, green: 0.4784313725, blue: 0.5294117647, alpha: 1)
@@ -134,11 +174,22 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
                         print("oj")
                 }
                 
+                let points = dict?["points"] as! Int
+                if(points < 11) {
+                    self.rankLbl.text = "Beginner Sommelier | \(points)"
+                } else if(points < 26) {
+                    self.rankLbl.text = "Sommelier | \(points)"
+                } else if(points < 51) {
+                    self.rankLbl.text = "Advanced Sommelier | \(points)"
+                } else {
+                    self.rankLbl.text = "Master of Wine | \(points)"
+                }
+                
             } else {
                 print("Document does not exist")
             }
         }
-
+        }
     }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
@@ -157,13 +208,13 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
         }
     }
     
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+    func loginButton(_ loginButton: FBLoginButton!, didCompleteWith result: LoginManagerLoginResult!, error: Error!) {
         loginButton.isHidden = true
         self.loginBg.isHidden = true
         self.profileView.isHidden = false
         
-        if(result.token != nil) {
-            let credential = FacebookAuthProvider.credential(withAccessToken: result.token.tokenString)
+        if(result != nil) {
+            let credential = FacebookAuthProvider.credential(withAccessToken: result.token!.tokenString)
             Auth.auth().signIn(with: credential, completion: { (user, error) in
                 if let error = error {
                     print(error.localizedDescription)
@@ -171,13 +222,21 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
                     self.loginBg.isHidden = false
                     self.profileView.isHidden = true
                 } else {
-                    
+                    self.importOpinions()
+                    loginButton.isHidden = true
+                    self.nameLbl.text = Auth.auth().currentUser?.displayName
+                    let imageUrl = (Auth.auth().currentUser?.photoURL?.absoluteString)! + "?height=500"
+                    self.addUserToDb()
+                    print(imageUrl)
+                    if let url = URL(string: imageUrl) {
+                        self.downloadImage(from: url)
+                    }
                 }
             })
         }
     }
     
-    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(_ loginButton: FBLoginButton!) {
         
         try! Auth.auth().signOut()
     }
@@ -196,23 +255,30 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
     }
     
     func createSlides() -> [slideProfileReview] {
+        var amount = opinions.count
+        var slides = [slideProfileReview]()
+        if(amount>3) {
+            amount = 3
+        }
         
-        let slide1:slideProfileReview = Bundle.main.loadNibNamed("slideProfileReview", owner: self, options: nil)?.first as! slideProfileReview
-        slide1.ratingLbl.text = "4.7"
+        for i in 0...(amount-1) {
+            let slide:slideProfileReview = Bundle.main.loadNibNamed("slideProfileReview", owner: self, options: nil)?.first as! slideProfileReview
+            let rating = Double(opinions[i].rating).rounded(toPlaces: 1)
+            
+            slide.ratingLbl.text = "\(rating)"
+            slide.reviewLbl.text = opinions[i].review
+            slide.setWine(wineID: opinions[i].wineID)
+            slides.append(slide)
+        }
         
-        let slide2:slideProfileReview = Bundle.main.loadNibNamed("slideProfileReview", owner: self, options: nil)?.first as! slideProfileReview
-        slide2.ratingLbl.text = "4.9"
+        return slides
         
-        let slide3:slideProfileReview = Bundle.main.loadNibNamed("slideProfileReview", owner: self, options: nil)?.first as! slideProfileReview
-        slide3.ratingLbl.text = "3.1"
-        
-        return [slide1, slide2, slide3]
     }
     
     
     func setupSlideScrollView(slides : [slideProfileReview]) {
-        reviewScrollView.frame = CGRect(x: 0, y: 0, width: 313, height: 170)
-        reviewScrollView.contentSize = CGSize(width: 317 * CGFloat(slides.count), height: 170)
+      //  reviewScrollView.frame = CGRect(x: 0, y: 0, width: 313, height: 170)
+        reviewScrollView.contentSize = CGSize(width: 313 * CGFloat(slides.count), height: 170)
         reviewScrollView.isPagingEnabled = true
         
         for i in 0 ..< slides.count {
@@ -231,5 +297,89 @@ class profileVC: UIViewController, FBSDKLoginButtonDelegate, UIScrollViewDelegat
         let x = CGFloat(reviewPager.currentPage) * reviewScrollView.frame.size.width
         reviewScrollView.setContentOffset(CGPoint(x: x,y :0), animated: true)
     }
-
+    
+    @IBAction func editPref(_ sender: UIButton) {
+        prefView.isHidden = true
+        editProfileView.isHidden = false
+        
+        if(preferencesColorLbl.text != "-") {
+            colorSegment.selectedSegmentIndex = colorDict[preferencesColorLbl.text!]!
+            tasteSegment.selectedSegmentIndex = tasteDict[preferencesTasteLbl.text!]!
+            priceSegment.selectedSegmentIndex = self.prefPrice-1
+        }
+    }
+    
+    @IBAction func cancelEditPref(_ sender: UIButton) {
+        prefView.isHidden = false
+        editProfileView.isHidden = true
+    }
+    
+    @IBAction func savePreferences(_ sender: UIButton) {
+        prefView.isHidden = false
+        editProfileView.isHidden = true
+        var priceValue = 0
+        let priceDolar = priceSegment.titleForSegment(at: priceSegment.selectedSegmentIndex)
+        switch priceDolar {
+        case "$":
+            priceValue = 1
+        case "$$":
+            priceValue = 2
+        case "$$$":
+            priceValue = 3
+        default:
+            priceValue = 4
+            
+        }
+        
+        db.collection("users").document((Auth.auth().currentUser?.uid)!).updateData([
+            "color": colorSegment.titleForSegment(at: colorSegment.selectedSegmentIndex)!,
+            "taste": tasteSegment.titleForSegment(at: tasteSegment.selectedSegmentIndex)!,
+            "price": priceValue
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            }
+        }
+    }
+    
+    func importOpinions() {
+        let query = db.collection("opinions").whereField("userID", isEqualTo: Auth.auth().currentUser?.uid ?? "")
+        query.addSnapshotListener { (querySnapshot, err) in
+            if let err = err {
+                print("Err \(err.localizedDescription)")
+            } else {
+                self.opinions = [opinion]()
+                for document in querySnapshot!.documents {
+                    let opinionData = document.data() as NSDictionary
+                    self.opinions.append(opinion(id: document.documentID, rating: opinionData["rating"] as? Double ?? 0, userID: opinionData["userID"] as? String ?? "", wineID: opinionData["wineID"] as? String ?? "", review: opinionData["review"] as? String ?? "", note: opinionData["note"] as? String ?? ""))
+                }
+                
+                if(self.opinions.count != 0) {
+                    self.noOpinionView.isHidden = true
+                self.slides = self.createSlides()
+                self.setupSlideScrollView(slides: self.slides)
+                
+                self.reviewPager.numberOfPages = self.slides.count
+                self.reviewPager.currentPage = 0
+                self.reviewPager.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+                
+                self.view.bringSubviewToFront(self.reviewPager)
+                } else {
+                    self.noOpinionView.isHidden = false
+                }
+            }
+        }
+    }
+    
+    @objc func scrollViewTapped() {
+        performSegue(withIdentifier: "profileToOpinions", sender:self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "profileToOpinions" {
+            if let viewController = segue.destination as? opinionsVC {
+                    viewController.opinions = opinions
+                }
+            }
+    }
 }
